@@ -1,0 +1,16 @@
+{
+  "name": "WhatsApp CRM - Professional Customer Relationship Management",
+  "short_name": "WhatsApp CRM",
+  "description": "Professional-grade WhatsApp Customer Relationship Management system",
+  "icons": [],
+  "theme_color": "#25d366",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "orientation": "portrait",
+  "start_url": "/",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["business", "productivity", "communication"],
+  "screenshots": [],
+  "shortcuts": []
+}
