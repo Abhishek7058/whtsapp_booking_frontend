@@ -11,11 +11,9 @@ import {
   ChatBubbleLeftRightIcon,
   MagnifyingGlassIcon,
   FunnelIcon,
-  PlusIcon,
-  EllipsisVerticalIcon,
   UserIcon,
 } from '@heroicons/react/24/outline';
-import { useAuth } from '@/store/auth.store';
+// import { useAuth } from '@/store/auth.store';
 import { formatRelativeTime } from '@/lib/utils';
 
 // ============================================================================
@@ -52,82 +50,14 @@ interface Conversation {
 // Mock Data
 // ============================================================================
 
-const mockConversations: Conversation[] = [
-  {
-    id: 1,
-    contact: {
-      id: 1,
-      name: 'John Smith',
-      phoneNumber: '+1234567890',
-      profilePictureUrl: '/avatars/john.jpg',
-    },
-    status: 'OPEN',
-    priority: 'HIGH',
-    subject: 'Order inquiry',
-    lastMessage: {
-      content: 'Hi, I need help with my recent order #12345',
-      timestamp: '2024-01-15T10:30:00Z',
-      type: 'text',
-    },
-    unreadCount: 2,
-    assignedAgent: {
-      id: 1,
-      name: 'Sarah Johnson',
-      profilePictureUrl: '/avatars/sarah.jpg',
-    },
-    createdAt: '2024-01-15T09:00:00Z',
-    updatedAt: '2024-01-15T10:30:00Z',
-  },
-  {
-    id: 2,
-    contact: {
-      id: 2,
-      name: 'Maria Garcia',
-      phoneNumber: '+1234567891',
-    },
-    status: 'PENDING',
-    priority: 'NORMAL',
-    lastMessage: {
-      content: 'Thank you for your help!',
-      timestamp: '2024-01-15T09:45:00Z',
-      type: 'text',
-    },
-    unreadCount: 0,
-    createdAt: '2024-01-15T08:30:00Z',
-    updatedAt: '2024-01-15T09:45:00Z',
-  },
-  {
-    id: 3,
-    contact: {
-      id: 3,
-      name: 'David Wilson',
-      phoneNumber: '+1234567892',
-    },
-    status: 'ASSIGNED',
-    priority: 'URGENT',
-    subject: 'Technical support',
-    lastMessage: {
-      content: 'The app is not working properly',
-      timestamp: '2024-01-15T08:15:00Z',
-      type: 'text',
-    },
-    unreadCount: 1,
-    assignedAgent: {
-      id: 2,
-      name: 'Mike Chen',
-      profilePictureUrl: '/avatars/mike.jpg',
-    },
-    createdAt: '2024-01-15T08:00:00Z',
-    updatedAt: '2024-01-15T08:15:00Z',
-  },
-];
+
 
 // ============================================================================
 // Component
 // ============================================================================
 
 export default function ConversationsPage() {
-  const { user, isAdmin } = useAuth();
+  // const { user, isAdmin } = useAuth();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -161,9 +91,9 @@ export default function ConversationsPage() {
 
       if (data.success && data.data) {
         // Handle both array and paginated response
-        const conversationsList = Array.isArray(data.data) ? data.data : (data.data.content || []);
+        const conversationsList = Array.isArray(data.data) ? data.data : ((data.data as any)?.content || []);
         setConversations(conversationsList);
-        setTotalCount(data.data.totalElements || conversationsList.length);
+        setTotalCount((data.data as any)?.totalElements || conversationsList.length);
       }
     } catch (error: any) {
       console.error('Failed to load conversations:', error);
@@ -178,18 +108,7 @@ export default function ConversationsPage() {
     loadConversations();
   };
 
-  // Filter conversations based on search and filters
-  const filteredConversations = conversations.filter(conversation => {
-    const matchesSearch = searchQuery === '' || 
-      conversation.contact.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      conversation.contact.phoneNumber.includes(searchQuery) ||
-      conversation.lastMessage.content.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesStatus = statusFilter === 'all' || conversation.status === statusFilter;
-    const matchesPriority = priorityFilter === 'all' || conversation.priority === priorityFilter;
-    
-    return matchesSearch && matchesStatus && matchesPriority;
-  });
+
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -416,7 +335,7 @@ export default function ConversationsPage() {
 
                           {/* Actions */}
                           <button className="p-1 text-gray-400 hover:text-gray-600">
-                            <EllipsisVerticalIcon className="h-5 w-5" />
+                            <span className="text-lg">⋮</span>
                           </button>
                         </div>
 

@@ -159,7 +159,7 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({
   children,
   className,
   orientation = 'horizontal',
-  size = 'default',
+  // size = 'default', // unused for now
 }) => {
   return (
     <div
@@ -219,7 +219,7 @@ const LoadingButton: React.FC<LoadingButtonProps> = ({
   ...props
 }) => {
   return (
-    <Button loading={loading} {...props}>
+    <Button loading={loading || false} {...props}>
       {loading && loadingText ? loadingText : children}
     </Button>
   );
@@ -230,4 +230,4 @@ const LoadingButton: React.FC<LoadingButtonProps> = ({
 // ============================================================================
 
 export { Button, ButtonGroup, IconButton, LoadingButton, buttonVariants };
-export type { ButtonProps, IconButtonProps, LoadingButtonProps };
+// Types are already exported as interfaces above

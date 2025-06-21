@@ -14,7 +14,6 @@ import {
   CheckCircleIcon,
   ExclamationCircleIcon,
   SignalIcon,
-  PhoneIcon,
   PaperAirplaneIcon,
   ArrowUpIcon,
   ArrowDownIcon

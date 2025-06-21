@@ -7,44 +7,26 @@
 
 import React, { useState, useEffect } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
+import type { ApiResponse, PaginatedResponse, UserInfo } from '@/types/api';
 import {
   UserGroupIcon,
   MagnifyingGlassIcon,
   PlusIcon,
   FunnelIcon,
-  EllipsisVerticalIcon,
   EnvelopeIcon,
   PhoneIcon,
   ShieldCheckIcon,
   UserIcon,
   ExclamationCircleIcon,
-  CheckCircleIcon,
-  ClockIcon
+  CheckCircleIcon
 } from '@heroicons/react/24/outline';
 
 // ============================================================================
 // Types
 // ============================================================================
 
-interface User {
-  id: number;
-  username: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: 'ADMIN' | 'TEAM_MEMBER';
-  status: 'ACTIVE' | 'INACTIVE' | 'SUSPENDED' | 'LOCKED';
-  profilePictureUrl?: string;
-  department?: string;
-  jobTitle?: string;
-  phoneNumber?: string;
-  isOnline: boolean;
-  lastLoginAt?: string;
-  maxConcurrentChats: number;
-  skills?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+// Use UserInfo from API types instead of local interface
+type User = UserInfo;
 
 interface UserResult {
   status: 'success' | 'error' | 'loading';
@@ -85,11 +67,11 @@ export default function AdminUsersPage() {
       // Import API helpers
       const { usersApi } = await import('@/lib/api');
 
-      const data = await usersApi.getAll();
+      const data = await usersApi.getAll() as ApiResponse<PaginatedResponse<UserInfo> | UserInfo[]>;
       if (data.success && data.data) {
         // Handle both paginated and direct array responses
-        const usersList = data.data.content || data.data;
-        setUsers(Array.isArray(usersList) ? usersList : []);
+        const usersList = Array.isArray(data.data) ? data.data : (data.data as PaginatedResponse<UserInfo>).content || [];
+        setUsers(usersList);
         showResult('success', `Loaded ${usersList.length} users successfully!`);
       } else {
         throw new Error(data.message || 'Failed to load users');
@@ -118,23 +100,7 @@ export default function AdminUsersPage() {
     return matchesSearch && matchesRole && matchesStatus && matchesDepartment;
   });
 
-  const getRoleColor = (role: string) => {
-    switch (role) {
-      case 'ADMIN': return 'bg-purple-100 text-purple-800';
-      case 'TEAM_MEMBER': return 'bg-blue-100 text-blue-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'ACTIVE': return 'bg-green-100 text-green-800';
-      case 'INACTIVE': return 'bg-gray-100 text-gray-800';
-      case 'SUSPENDED': return 'bg-yellow-100 text-yellow-800';
-      case 'LOCKED': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
 
   const handleUserAction = async (action: string, userId: number) => {
     showResult('loading', `Processing ${action} action...`);
@@ -314,7 +280,7 @@ export default function AdminUsersPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Online Now</p>
-                <p className="text-3xl font-bold text-gray-900">{users.filter(u => u.isOnline).length}</p>
+                <p className="text-3xl font-bold text-gray-900">{users.filter(u => u.isOnline === true).length}</p>
               </div>
               <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
                 <div className="h-6 w-6 rounded-full bg-green-500"></div>
@@ -384,7 +350,7 @@ export default function AdminUsersPage() {
                       </div>
                       {/* Online Indicator */}
                       <div className={`absolute bottom-0 right-0 h-4 w-4 rounded-full border-2 border-white ${
-                        user.isOnline ? 'bg-green-400' : 'bg-gray-400'
+                        user.isOnline === true ? 'bg-green-400' : 'bg-gray-400'
                       }`} />
                     </div>
 
@@ -476,7 +442,7 @@ export default function AdminUsersPage() {
                           )}
                         </div>
 
-                        <span>Created {formatRelativeTime(user.createdAt)}</span>
+                        <span>Created {user.createdAt ? formatRelativeTime(user.createdAt) : 'Unknown'}</span>
                       </div>
                     </div>
                   </div>

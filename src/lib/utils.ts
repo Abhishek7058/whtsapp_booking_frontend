@@ -249,7 +249,7 @@ export function deepClone<T>(obj: T): T {
 /**
  * Pick specific keys from object
  */
-export function pick<T, K extends keyof T>(obj: T, keys: K[]): Pick<T, K> {
+export function pick<T extends object, K extends keyof T>(obj: T, keys: K[]): Pick<T, K> {
   const result = {} as Pick<T, K>;
   keys.forEach(key => {
     if (key in obj) {
@@ -403,7 +403,7 @@ export function generateColor(): string {
     '#3b82f6', '#6366f1', '#8b5cf6', '#a855f7', '#d946ef',
     '#ec4899', '#f43f5e',
   ];
-  return colors[Math.floor(Math.random() * colors.length)];
+  return colors[Math.floor(Math.random() * colors.length)] || '#6b7280';
 }
 
 // ============================================================================

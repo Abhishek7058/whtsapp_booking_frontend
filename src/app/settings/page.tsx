@@ -16,7 +16,6 @@ import {
   KeyIcon,
   ServerIcon,
   ClockIcon,
-  UserIcon,
   BellIcon
 } from '@heroicons/react/24/outline';
 
@@ -56,9 +55,9 @@ interface SettingsResult {
 }
 
 export default function SettingsPage() {
-  const [settings, setSettings] = useState<SystemSettings | null>(null);
+  // const [settings] = useState<SystemSettings | null>(null);
   const [health, setHealth] = useState<SystemHealth | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
   const [result, setResult] = useState<SettingsResult | null>(null);
   
   // Form states
@@ -107,8 +106,8 @@ export default function SettingsPage() {
 
       const data = await settingsApi.get();
       if (data.success && data.data) {
-        setSettings(data.data);
-        setFormSettings(data.data);
+        // setSettings(data.data);
+        setFormSettings(data.data as SystemSettings);
       }
     } catch (error) {
       console.error('Failed to load settings:', error);
@@ -122,7 +121,7 @@ export default function SettingsPage() {
 
       const data = await settingsApi.getHealth();
       if (data.success && data.data) {
-        setHealth(data.data);
+        setHealth(data.data as SystemHealth);
       }
     } catch (error) {
       console.error('Failed to load system health:', error);
@@ -140,7 +139,7 @@ export default function SettingsPage() {
 
       if (data.success) {
         showResult('success', 'Settings saved successfully!');
-        setSettings(formSettings);
+        // setSettings(formSettings);
       } else {
         showResult('error', `Failed to save settings: ${data.message || 'Unknown error'}`);
       }

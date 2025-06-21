@@ -6,7 +6,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import { 
   QuestionMarkCircleIcon,
   BookOpenIcon,
@@ -36,7 +36,7 @@ interface HelpArticle {
 }
 
 export default function HelpPage() {
-  const router = useRouter();
+  // const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
   const [selectedArticle, setSelectedArticle] = useState<HelpArticle | null>(null);

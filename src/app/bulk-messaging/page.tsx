@@ -10,12 +10,8 @@ import DashboardLayout from '@/components/layout/DashboardLayout';
 import {
   UsersIcon,
   PaperAirplaneIcon,
-  DocumentTextIcon,
   CheckCircleIcon,
-  ExclamationCircleIcon,
-  ClockIcon,
-  EyeIcon,
-  TrashIcon
+  ExclamationCircleIcon
 } from '@heroicons/react/24/outline';
 
 interface Template {
@@ -46,7 +42,7 @@ interface BulkCampaign {
 export default function BulkMessagingPage() {
   const [templates, setTemplates] = useState<Template[]>([]);
   const [campaigns, setCampaigns] = useState<BulkCampaign[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
   const [result, setResult] = useState<BulkMessageResult | null>(null);
   
   // Form states
@@ -82,7 +78,7 @@ export default function BulkMessagingPage() {
 
       const data = await templatesApi.getActive();
       if (data.success && data.data) {
-        setTemplates(data.data);
+        setTemplates(Array.isArray(data.data) ? data.data : []);
       }
     } catch (error) {
       console.error('Failed to load templates:', error);
@@ -97,7 +93,7 @@ export default function BulkMessagingPage() {
 
       const data = await messagesApi.getBulkCampaigns();
       if (data.success && data.data) {
-        setCampaigns(data.data);
+        setCampaigns(Array.isArray(data.data) ? data.data : []);
       }
     } catch (error) {
       console.error('Failed to load campaigns:', error);
@@ -366,17 +362,23 @@ export default function BulkMessagingPage() {
                     <div className="text-sm text-gray-800 whitespace-pre-wrap mb-3">
                       {getSelectedTemplate()?.content}
                     </div>
-                    {getSelectedTemplate()?.parameters.length > 0 && (
-                      <div>
-                        <p className="text-xs text-gray-500 mb-2">
-                          Parameters: {getSelectedTemplate()?.parameters.join(', ')}
-                        </p>
-                      </div>
-                    )}
+                    {(() => {
+                      const selectedTemplate = getSelectedTemplate();
+                      return selectedTemplate?.parameters && selectedTemplate.parameters.length > 0 && (
+                        <div>
+                          <p className="text-xs text-gray-500 mb-2">
+                            Parameters: {selectedTemplate.parameters.join(', ')}
+                          </p>
+                        </div>
+                      );
+                    })()}
                   </div>
                 )}
 
-                {getSelectedTemplate()?.parameters.length > 0 && (
+                {(() => {
+                  const selectedTemplate = getSelectedTemplate();
+                  return selectedTemplate?.parameters && selectedTemplate.parameters.length > 0;
+                })() && (
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Template Parameters (JSON)

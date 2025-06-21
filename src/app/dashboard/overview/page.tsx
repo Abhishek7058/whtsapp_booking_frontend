@@ -32,7 +32,7 @@ interface DashboardStats {
 
 export default function DashboardOverviewPage() {
   const router = useRouter();
-  const { user, isAuthenticated } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -58,7 +58,7 @@ export default function DashboardOverviewPage() {
       const response = await dashboardApi.getStats();
 
       if (response.success && response.data) {
-        setStats(response.data);
+        setStats(response.data as DashboardStats);
       } else {
         throw new Error(response.message || 'Failed to load dashboard statistics');
       }

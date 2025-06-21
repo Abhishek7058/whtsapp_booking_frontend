@@ -158,4 +158,4 @@ const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
 // ============================================================================
 
 export { Checkbox, CheckboxGroup };
-export type { CheckboxProps };
+// CheckboxProps is already exported as interface above

@@ -191,4 +191,4 @@ const AvatarGroup: React.FC<AvatarGroupProps> = ({
 // ============================================================================
 
 export { Avatar, AvatarGroup, avatarVariants };
-export type { AvatarProps };
+// AvatarProps is already exported as interface above

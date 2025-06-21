@@ -38,7 +38,7 @@ const inputVariants = cva(
 // ============================================================================
 
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement>,
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>,
     VariantProps<typeof inputVariants> {
   label?: string;
   error?: string;
@@ -297,4 +297,4 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
 // ============================================================================
 
 export { Input, Textarea, SearchInput, PasswordInput, inputVariants };
-export type { InputProps, TextareaProps, SearchInputProps, PasswordInputProps };
+// Types are already exported as interfaces above

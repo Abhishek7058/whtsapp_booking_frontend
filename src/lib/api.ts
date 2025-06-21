@@ -119,7 +119,7 @@ const createApiClient = (): AxiosInstance => {
       }
 
       // Add request timestamp for debugging
-      config.metadata = { startTime: new Date() };
+      (config as any).metadata = { startTime: new Date() };
       
       return config;
     },
@@ -133,7 +133,7 @@ const createApiClient = (): AxiosInstance => {
     (response: AxiosResponse) => {
       // Log response time for debugging
       const endTime = new Date();
-      const duration = endTime.getTime() - response.config.metadata?.startTime?.getTime();
+      const duration = endTime.getTime() - (response.config as any).metadata?.startTime?.getTime();
       
       if (process.env.NODE_ENV === 'development') {
         console.log(`API Request: ${response.config.method?.toUpperCase()} ${response.config.url} - ${duration}ms`);
@@ -145,14 +145,14 @@ const createApiClient = (): AxiosInstance => {
       const originalRequest = error.config;
 
       // Handle 401 Unauthorized - Token expired
-      if (error.response?.status === 401 && !originalRequest?._retry) {
-        originalRequest._retry = true;
+      if (error.response?.status === 401 && !(originalRequest as any)?._retry) {
+        (originalRequest as any)._retry = true;
 
         try {
           const refreshToken = getRefreshToken();
           if (refreshToken) {
             const newToken = await refreshAuthToken(refreshToken);
-            if (newToken) {
+            if (newToken && originalRequest) {
               setAuthToken(newToken);
               originalRequest.headers.Authorization = `Bearer ${newToken}`;
               return client(originalRequest);
@@ -251,7 +251,7 @@ const transformAxiosError = (error: AxiosError): ApiError => {
   // Network or other errors
   return {
     message: error.message || 'Network error occurred',
-    errorCode: error.code,
+    errorCode: error.code || 'NETWORK_ERROR',
     timestamp: new Date().toISOString(),
     statusCode: response?.status || 0,
   };

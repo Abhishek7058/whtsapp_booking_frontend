@@ -12,10 +12,8 @@ import {
   MagnifyingGlassIcon,
   PlusIcon,
   FunnelIcon,
-  EllipsisVerticalIcon,
   PhoneIcon,
   EnvelopeIcon,
-  BuildingOfficeIcon,
   PencilIcon,
   TrashIcon,
   CheckCircleIcon,
@@ -114,9 +112,9 @@ export default function ContactsPage() {
 
       if (data.success && data.data) {
         // Handle both array and paginated response
-        const contactsList = Array.isArray(data.data) ? data.data : (data.data.content || []);
+        const contactsList = Array.isArray(data.data) ? data.data : ((data.data as any)?.content || []);
         setContacts(contactsList);
-        setTotalCount(data.data.totalElements || contactsList.length);
+        setTotalCount((data.data as any)?.totalElements || contactsList.length);
       }
     } catch (error: any) {
       console.error('Failed to load contacts:', error);
@@ -232,12 +230,7 @@ export default function ContactsPage() {
     }
   };
 
-  const getLeadScoreColor = (score: number) => {
-    if (score >= 80) return 'text-green-600';
-    if (score >= 60) return 'text-yellow-600';
-    if (score >= 40) return 'text-orange-600';
-    return 'text-red-600';
-  };
+
 
   const formatTime = (dateString: string) => {
     return new Date(dateString).toLocaleString();

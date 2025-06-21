@@ -70,6 +70,8 @@ const Dropdown: React.FC<DropdownProps> = ({
         document.removeEventListener('keydown', handleEscape);
       };
     }
+
+    return undefined;
   }, [isOpen]);
 
   const handleItemClick = (item: DropdownItem) => {
@@ -174,7 +176,7 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({
   className,
   disabled = false,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [, setIsOpen] = useState(false);
   const selectedOption = options.find(option => option.value === value);
 
   const handleSelect = (optionValue: string) => {
@@ -215,7 +217,7 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({
   const items: DropdownItem[] = options.map(option => ({
     label: option.label,
     value: option.value,
-    disabled: option.disabled,
+    disabled: option.disabled || false,
     onClick: () => handleSelect(option.value),
   }));
 
@@ -234,4 +236,4 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({
 // ============================================================================
 
 export { Dropdown, SelectDropdown };
-export type { DropdownProps, DropdownItem };
+// Types are already exported as interfaces above

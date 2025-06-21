@@ -71,7 +71,7 @@ export default function MessageLogsPage() {
 
       const data = await templatesApi.getActive();
       if (data.success && data.data) {
-        setTemplates(data.data);
+        setTemplates(Array.isArray(data.data) ? data.data : []);
       }
     } catch (error) {
       console.error('Failed to load templates:', error);
@@ -89,9 +89,9 @@ export default function MessageLogsPage() {
 
       if (data.success && data.data) {
         // Handle both array and paginated response
-        const messagesList = Array.isArray(data.data) ? data.data : (data.data.content || []);
+        const messagesList = Array.isArray(data.data) ? data.data : ((data.data as any)?.content || []);
         setMessageLogs(messagesList);
-        setTotalCount(data.data.totalElements || messagesList.length);
+        setTotalCount((data.data as any)?.totalElements || messagesList.length);
       }
     } catch (error) {
       console.error('Failed to load message logs:', error);

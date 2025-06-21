@@ -11,7 +11,6 @@ import {
   ChartBarIcon,
   ArrowUpIcon,
   ArrowDownIcon,
-  CalendarIcon,
   DocumentArrowDownIcon,
   ExclamationCircleIcon,
   ClockIcon
@@ -85,13 +84,14 @@ export default function AnalyticsPage() {
       // Load dashboard stats
       const statsData = await dashboardApi.getStats();
       if (statsData.success && statsData.data) {
-        setAnalytics(statsData.data);
+        setAnalytics(statsData.data as AnalyticsData);
       }
 
       // Load daily statistics
       const dailyData = await dashboardApi.getMessageStatsByDate(dateRange);
       if (dailyData.success && dailyData.data) {
-        setDailyStats(dailyData.data.map((item: any) => ({
+        const dailyArray = Array.isArray(dailyData.data) ? dailyData.data : [];
+        setDailyStats(dailyArray.map((item: any) => ({
           date: item[0] || item.date,
           count: item[1] || item.count || 0
         })));
@@ -100,7 +100,8 @@ export default function AnalyticsPage() {
       // Load message statistics
       const messageData = await dashboardApi.getMessageStats();
       if (messageData.success && messageData.data) {
-        setMessageStats(messageData.data.map((item: any) => ({
+        const messageArray = Array.isArray(messageData.data) ? messageData.data : [];
+        setMessageStats(messageArray.map((item: any) => ({
           status: item[0] || item.status,
           count: item[1] || item.count || 0
         })));
@@ -123,17 +124,7 @@ export default function AnalyticsPage() {
     return new Intl.NumberFormat().format(num);
   };
 
-  const getChangeIcon = (change: number) => {
-    return change >= 0 ? (
-      <ArrowUpIcon className="h-4 w-4 text-green-500" />
-    ) : (
-      <ArrowDownIcon className="h-4 w-4 text-red-500" />
-    );
-  };
 
-  const getChangeColor = (change: number) => {
-    return change >= 0 ? 'text-green-600' : 'text-red-600';
-  };
 
   return (
     <DashboardLayout>

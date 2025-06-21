@@ -13,8 +13,7 @@ import {
   ChatBubbleLeftRightIcon,
   DocumentTextIcon,
   ExclamationCircleIcon,
-  CheckCircleIcon,
-  ClockIcon
+  CheckCircleIcon
 } from '@heroicons/react/24/outline';
 
 interface MessageTemplate {
@@ -53,7 +52,7 @@ export default function MessagesPage() {
 
       const data = await templatesApi.getActive();
       if (data.success && data.data) {
-        setTemplates(data.data);
+        setTemplates(Array.isArray(data.data) ? data.data : []);
       }
     } catch (error) {
       console.error('Failed to load templates:', error);
@@ -142,7 +141,7 @@ export default function MessagesPage() {
 
         // Validate all required parameters are filled
         for (const param of selectedTemplateObj.parameters) {
-          if (!parameters[param] || parameters[param].trim() === '') {
+          if (!(parameters as any)[param] || (parameters as any)[param].trim() === '') {
             showResult('error', `Please fill in the "${param}" parameter`);
             return;
           }
@@ -328,18 +327,24 @@ export default function MessagesPage() {
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <h4 className="text-sm font-medium text-gray-700 mb-2">Template Preview:</h4>
                   <p className="text-sm text-gray-600">{getSelectedTemplate()?.content}</p>
-                  {getSelectedTemplate()?.parameters.length > 0 && (
-                    <div className="mt-2">
-                      <p className="text-xs text-gray-500">
-                        Parameters: {getSelectedTemplate()?.parameters.join(', ')}
-                      </p>
-                    </div>
-                  )}
+                  {(() => {
+                    const selectedTemplate = getSelectedTemplate();
+                    return selectedTemplate?.parameters && selectedTemplate.parameters.length > 0 && (
+                      <div className="mt-2">
+                        <p className="text-xs text-gray-500">
+                          Parameters: {selectedTemplate.parameters.join(', ')}
+                        </p>
+                      </div>
+                    );
+                  })()}
                 </div>
               )}
 
               {/* Template Parameters */}
-              {getSelectedTemplate()?.parameters.length > 0 && (
+              {(() => {
+                const selectedTemplate = getSelectedTemplate();
+                return selectedTemplate?.parameters && selectedTemplate.parameters.length > 0;
+              })() && (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <label className="block text-sm font-medium text-gray-700">

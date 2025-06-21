@@ -96,7 +96,7 @@ export default function ChatbotPage() {
       const data = await chatbotsApi.getAll();
       if (data.success && data.data) {
         // Handle both array and paginated response
-        const botsList = Array.isArray(data.data) ? data.data : (data.data.content || []);
+        const botsList = Array.isArray(data.data) ? data.data : ((data.data as any)?.content || []);
         setChatbots(botsList);
       }
     } catch (error) {

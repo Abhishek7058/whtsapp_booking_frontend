@@ -7,7 +7,7 @@ import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import { authService } from '@/services/auth.service';
-import { tokenManager } from '@/services/api/client';
+// import { tokenManager } from '@/services/api/client';
 import { UserInfo, LoginRequest, ChangePasswordRequest } from '@/types/api';
 
 // ============================================================================

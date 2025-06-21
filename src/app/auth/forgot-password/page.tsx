@@ -203,7 +203,7 @@ export default function ForgotPasswordPage() {
                   type="email"
                   placeholder="Enter your email address"
                   leftIcon={<EnvelopeIcon className="h-5 w-5" />}
-                  error={errors.email?.message}
+                  error={errors.email?.message || ''}
                   autoComplete="email"
                   autoFocus
                 />

@@ -8,7 +8,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -23,7 +22,6 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Checkbox } from '@/components/ui/Checkbox';
 import { Alert } from '@/components/ui/Alert';
-import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
 
 // ============================================================================
@@ -162,7 +160,7 @@ export default function LoginPage() {
                     type="text"
                     autoComplete="username"
                     placeholder="Enter your username or email"
-                    error={errors.usernameOrEmail?.message}
+                    error={errors.usernameOrEmail?.message || ''}
                     {...register('usernameOrEmail')}
                   />
                 </div>
@@ -179,7 +177,7 @@ export default function LoginPage() {
                     type={showPassword ? 'text' : 'password'}
                     autoComplete="current-password"
                     placeholder="Enter your password"
-                    error={errors.password?.message}
+                    error={errors.password?.message || ''}
                     {...register('password')}
                   />
                   <button

@@ -79,7 +79,7 @@ export default function DashboardPage() {
       // Load dashboard stats
       const statsResponse = await dashboardApi.getStats();
       if (statsResponse.success && statsResponse.data) {
-        setStats(statsResponse.data);
+        setStats(statsResponse.data as DashboardStats);
       }
 
       // Load recent conversations/messages
@@ -88,7 +88,7 @@ export default function DashboardPage() {
         // Transform message data to conversation format
         const messages = Array.isArray(conversationsResponse.data)
           ? conversationsResponse.data
-          : conversationsResponse.data.content || [];
+          : (conversationsResponse.data as any)?.content || [];
 
         const conversations = messages.map((msg: any, index: number) => ({
           id: msg.id || index,
@@ -296,7 +296,7 @@ export default function DashboardPage() {
                     {conversation.assignedAgent && (
                       <div className="flex items-center space-x-1">
                         <Avatar
-                          src={conversation.assignedAgent.avatar}
+                          src={conversation.assignedAgent.avatar || ''}
                           fallback={conversation.assignedAgent.name.split(' ').map(n => n[0]).join('')}
                           size="xs"
                         />

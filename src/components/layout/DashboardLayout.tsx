@@ -8,11 +8,10 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
+// import Image from 'next/image';
 import {
   Bars3Icon,
   XMarkIcon,
-  HomeIcon,
   ChatBubbleLeftRightIcon,
   UserGroupIcon,
   ChartBarIcon,
@@ -40,7 +39,7 @@ import { Badge } from '@/components/ui/Badge';
 interface NavigationItem {
   name: string;
   href: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: React.ComponentType<any>;
   badge?: number;
   adminOnly?: boolean;
 }
@@ -118,7 +117,7 @@ const navigation: NavigationItem[] = [
 
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [notifications, setNotifications] = useState(3); // Mock data
+  const [notifications] = useState(3); // Mock data
   const { user, logout, isAdmin, updateOnlineStatus } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
@@ -274,9 +273,9 @@ const SidebarContent: React.FC<SidebarContentProps> = ({
       {/* User info */}
       <div className="flex items-center gap-x-3 rounded-lg bg-gray-50 p-3">
         <Avatar
-          src={user?.profilePictureUrl}
-          alt={user?.firstName}
-          fallback={`${user?.firstName?.[0]}${user?.lastName?.[0]}`}
+          src={user?.profilePictureUrl || ''}
+          alt={user?.firstName || ''}
+          fallback={`${user?.firstName?.[0] || ''}${user?.lastName?.[0] || ''}`}
           size="sm"
         />
         <div className="flex-1 min-w-0">
@@ -304,7 +303,7 @@ const SidebarContent: React.FC<SidebarContentProps> = ({
                   <li key={item.name}>
                     <Link
                       href={item.href}
-                      onClick={onClose}
+                      onClick={onClose || (() => {})}
                       className={cn(
                         'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold transition-colors',
                         isActive

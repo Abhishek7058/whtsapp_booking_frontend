@@ -206,4 +206,4 @@ const PriorityBadge: React.FC<PriorityBadgeProps> = ({ priority, ...props }) => 
 // ============================================================================
 
 export { Badge, StatusBadge, NotificationBadge, PriorityBadge, badgeVariants };
-export type { BadgeProps, StatusBadgeProps, NotificationBadgeProps, PriorityBadgeProps };
+// Types are already exported as interfaces above

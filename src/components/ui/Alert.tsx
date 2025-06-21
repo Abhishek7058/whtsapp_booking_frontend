@@ -194,4 +194,4 @@ const AlertWithIcon: React.FC<AlertWithIconProps> = ({
 // ============================================================================
 
 export { Alert, AlertTitle, AlertDescription, AlertWithIcon, alertVariants };
-export type { AlertProps, AlertTitleProps, AlertDescriptionProps, AlertWithIconProps };
+export type { AlertWithIconProps };

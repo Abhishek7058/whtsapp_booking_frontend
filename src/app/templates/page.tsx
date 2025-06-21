@@ -14,8 +14,7 @@ import {
   PencilIcon,
   TrashIcon,
   CheckCircleIcon,
-  ExclamationCircleIcon,
-  ClockIcon
+  ExclamationCircleIcon
 } from '@heroicons/react/24/outline';
 
 interface Template {
@@ -80,7 +79,7 @@ export default function TemplatesPage() {
       const data = await templatesApi.getAll();
       if (data.success && data.data) {
         // Handle both array and paginated response
-        const templateList = Array.isArray(data.data) ? data.data : (data.data.content || []);
+        const templateList = Array.isArray(data.data) ? data.data : ((data.data as any)?.content || []);
         setTemplates(templateList);
       }
     } catch (error) {
@@ -158,7 +157,7 @@ export default function TemplatesPage() {
       const data = await templatesApi.preview(parseInt(previewTemplateId), parameters);
 
       if (data.success) {
-        setPreviewContent(data.data);
+        setPreviewContent(data.data as string);
         setShowPreview(true);
         showResult('success', 'Template preview generated!');
       } else {
@@ -212,11 +211,11 @@ export default function TemplatesPage() {
 
   const extractVariables = (content: string) => {
     const variableRegex = /\{\{(\w+)\}\}/g;
-    const variables = [];
+    const variables: string[] = [];
     let match;
 
     while ((match = variableRegex.exec(content)) !== null) {
-      if (!variables.includes(match[1])) {
+      if (match[1] && !variables.includes(match[1])) {
         variables.push(match[1]);
       }
     }
@@ -414,7 +413,10 @@ export default function TemplatesPage() {
                 </select>
               </div>
 
-              {getSelectedTemplate() && getSelectedTemplate()?.parameters.length > 0 && (
+              {(() => {
+                const selectedTemplate = getSelectedTemplate();
+                return selectedTemplate && selectedTemplate.parameters && selectedTemplate.parameters.length > 0;
+              })() && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Template Parameters (JSON)

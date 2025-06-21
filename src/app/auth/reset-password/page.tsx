@@ -22,7 +22,6 @@ import {
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { Alert, AlertDescription } from '@/components/ui/Alert';
 import toast from 'react-hot-toast';
 import { authService } from '@/services/auth.service';
 
@@ -211,7 +210,7 @@ export default function ResetPasswordPage() {
                       )}
                     </button>
                   }
-                  error={errors.newPassword?.message}
+                  error={errors.newPassword?.message || ''}
                   autoComplete="new-password"
                   autoFocus
                 />
@@ -237,7 +236,7 @@ export default function ResetPasswordPage() {
                       )}
                     </button>
                   }
-                  error={errors.confirmPassword?.message}
+                  error={errors.confirmPassword?.message || ''}
                   autoComplete="new-password"
                 />
               </div>
